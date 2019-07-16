@@ -1,5 +1,5 @@
 {
-  "name": "cms",
+  "name": "cms2",
   "private": true,
   "version": "0.1.0",
   "description": "A Strapi application",
@@ -18,27 +18,26 @@
     "eslint-plugin-react": "^7.7.0"
   },
   "dependencies": {
-    "knex": "latest",
     "lodash": "^4.17.5",
-    "sqlite3": "latest",
     "strapi": "3.0.0-beta.10",
     "strapi-admin": "3.0.0-beta.10",
+    "strapi-utils": "3.0.0-beta.10",
+    "strapi-plugin-settings-manager": "3.0.0-beta.10",
+    "strapi-plugin-content-type-builder": "3.0.0-beta.10",
+    "strapi-plugin-content-manager": "3.0.0-beta.10",
+    "strapi-plugin-users-permissions": "3.0.0-beta.10",
+    "strapi-plugin-email": "3.0.0-beta.10",
+    "strapi-plugin-upload": "3.0.0-beta.10",
     "strapi-hook-bookshelf": "3.0.0-beta.10",
     "strapi-hook-knex": "3.0.0-beta.10",
-    "strapi-plugin-content-manager": "3.0.0-beta.10",
-    "strapi-plugin-content-type-builder": "3.0.0-beta.10",
-    "strapi-plugin-email": "3.0.0-beta.10",
-    "strapi-plugin-graphql": "3.0.0-beta.10",
-    "strapi-plugin-settings-manager": "3.0.0-beta.10",
-    "strapi-plugin-upload": "3.0.0-beta.10",
-    "strapi-plugin-users-permissions": "3.0.0-beta.10",
-    "strapi-utils": "3.0.0-beta.10"
+    "knex": "latest",
+    "sqlite3": "latest"
   },
   "author": {
     "name": "A Strapi developer"
   },
   "strapi": {
-    "uuid": "6f9c495f-9050-486c-aa2c-e35d3a2e3e69"
+    "uuid": "9148e119-bc33-4a84-bdf3-6c256a2d9197"
   },
   "engines": {
     "node": "^10.0.0",
