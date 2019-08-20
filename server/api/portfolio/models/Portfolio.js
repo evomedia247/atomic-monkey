@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Lifecycle callbacks for the `Work` model.
+ * Lifecycle callbacks for the `Portfolio` model.
  */
 
 module.exports = {

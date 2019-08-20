@@ -1,8 +1,8 @@
-/* global Work */
+/* global Portfolio */
 'use strict';
 
 /**
- * Work.js service
+ * Portfolio.js service
  *
  * @description: A set of functions similar to controller's actions to avoid code duplication.
  */
@@ -18,43 +18,43 @@ const { convertRestQueryParams, buildQuery } = require('strapi-utils');
 module.exports = {
 
   /**
-   * Promise to fetch all works.
+   * Promise to fetch all portfolios.
    *
    * @return {Promise}
    */
 
   fetchAll: (params, populate) => {
     // Select field to populate.
-    const withRelated = populate || Work.associations
+    const withRelated = populate || Portfolio.associations
       .filter(ast => ast.autoPopulate !== false)
       .map(ast => ast.alias);
 
     const filters = convertRestQueryParams(params);
 
-    return Work.query(buildQuery({ model: Work, filters }))
+    return Portfolio.query(buildQuery({ model: Portfolio, filters }))
       .fetchAll({ withRelated })
       .then(data => data.toJSON());
   },
 
   /**
-   * Promise to fetch a/an work.
+   * Promise to fetch a/an portfolio.
    *
    * @return {Promise}
    */
 
   fetch: (params) => {
     // Select field to populate.
-    const populate = Work.associations
+    const populate = Portfolio.associations
       .filter(ast => ast.autoPopulate !== false)
       .map(ast => ast.alias);
 
-    return Work.forge(_.pick(params, 'id')).fetch({
+    return Portfolio.forge(_.pick(params, 'id')).fetch({
       withRelated: populate
     });
   },
 
   /**
-   * Promise to count a/an work.
+   * Promise to count a/an portfolio.
    *
    * @return {Promise}
    */
@@ -63,54 +63,54 @@ module.exports = {
     // Convert `params` object to filters compatible with Bookshelf.
     const filters = convertRestQueryParams(params);
 
-    return Work.query(buildQuery({ model: Work, filters: _.pick(filters, 'where') })).count();
+    return Portfolio.query(buildQuery({ model: Portfolio, filters: _.pick(filters, 'where') })).count();
   },
 
   /**
-   * Promise to add a/an work.
+   * Promise to add a/an portfolio.
    *
    * @return {Promise}
    */
 
   add: async (values) => {
     // Extract values related to relational data.
-    const relations = _.pick(values, Work.associations.map(ast => ast.alias));
-    const data = _.omit(values, Work.associations.map(ast => ast.alias));
+    const relations = _.pick(values, Portfolio.associations.map(ast => ast.alias));
+    const data = _.omit(values, Portfolio.associations.map(ast => ast.alias));
 
     // Create entry with no-relational data.
-    const entry = await Work.forge(data).save();
+    const entry = await Portfolio.forge(data).save();
 
     // Create relational data and return the entry.
-    return Work.updateRelations({ id: entry.id , values: relations });
+    return Portfolio.updateRelations({ id: entry.id , values: relations });
   },
 
   /**
-   * Promise to edit a/an work.
+   * Promise to edit a/an portfolio.
    *
    * @return {Promise}
    */
 
   edit: async (params, values) => {
     // Extract values related to relational data.
-    const relations = _.pick(values, Work.associations.map(ast => ast.alias));
-    const data = _.omit(values, Work.associations.map(ast => ast.alias));
+    const relations = _.pick(values, Portfolio.associations.map(ast => ast.alias));
+    const data = _.omit(values, Portfolio.associations.map(ast => ast.alias));
 
     // Create entry with no-relational data.
-    const entry = await Work.forge(params).save(data);
+    const entry = await Portfolio.forge(params).save(data);
 
     // Create relational data and return the entry.
-    return Work.updateRelations(Object.assign(params, { values: relations }));
+    return Portfolio.updateRelations(Object.assign(params, { values: relations }));
   },
 
   /**
-   * Promise to remove a/an work.
+   * Promise to remove a/an portfolio.
    *
    * @return {Promise}
    */
 
   remove: async (params) => {
     params.values = {};
-    Work.associations.map(association => {
+    Portfolio.associations.map(association => {
       switch (association.nature) {
         case 'oneWay':
         case 'oneToOne':
@@ -127,41 +127,41 @@ module.exports = {
       }
     });
 
-    await Work.updateRelations(params);
+    await Portfolio.updateRelations(params);
 
-    return Work.forge(params).destroy();
+    return Portfolio.forge(params).destroy();
   },
 
   /**
-   * Promise to search a/an work.
+   * Promise to search a/an portfolio.
    *
    * @return {Promise}
    */
 
   search: async (params) => {
     // Convert `params` object to filters compatible with Bookshelf.
-    const filters = strapi.utils.models.convertParams('work', params);
+    const filters = strapi.utils.models.convertParams('portfolio', params);
     // Select field to populate.
-    const populate = Work.associations
+    const populate = Portfolio.associations
       .filter(ast => ast.autoPopulate !== false)
       .map(ast => ast.alias);
 
-    const associations = Work.associations.map(x => x.alias);
-    const searchText = Object.keys(Work._attributes)
-      .filter(attribute => attribute !== Work.primaryKey && !associations.includes(attribute))
-      .filter(attribute => ['string', 'text'].includes(Work._attributes[attribute].type));
+    const associations = Portfolio.associations.map(x => x.alias);
+    const searchText = Object.keys(Portfolio._attributes)
+      .filter(attribute => attribute !== Portfolio.primaryKey && !associations.includes(attribute))
+      .filter(attribute => ['string', 'text'].includes(Portfolio._attributes[attribute].type));
 
-    const searchInt = Object.keys(Work._attributes)
-      .filter(attribute => attribute !== Work.primaryKey && !associations.includes(attribute))
-      .filter(attribute => ['integer', 'decimal', 'float'].includes(Work._attributes[attribute].type));
+    const searchInt = Object.keys(Portfolio._attributes)
+      .filter(attribute => attribute !== Portfolio.primaryKey && !associations.includes(attribute))
+      .filter(attribute => ['integer', 'decimal', 'float'].includes(Portfolio._attributes[attribute].type));
 
-    const searchBool = Object.keys(Work._attributes)
-      .filter(attribute => attribute !== Work.primaryKey && !associations.includes(attribute))
-      .filter(attribute => ['boolean'].includes(Work._attributes[attribute].type));
+    const searchBool = Object.keys(Portfolio._attributes)
+      .filter(attribute => attribute !== Portfolio.primaryKey && !associations.includes(attribute))
+      .filter(attribute => ['boolean'].includes(Portfolio._attributes[attribute].type));
 
     const query = (params._q || '').replace(/[^a-zA-Z0-9.-\s]+/g, '');
 
-    return Work.query(qb => {
+    return Portfolio.query(qb => {
       if (!_.isNaN(_.toNumber(query))) {
         searchInt.forEach(attribute => {
           qb.orWhereRaw(`${attribute} = ${_.toNumber(query)}`);
@@ -175,7 +175,7 @@ module.exports = {
       }
 
       // Search in columns with text using index.
-      switch (Work.client) {
+      switch (Portfolio.client) {
         case 'mysql':
           qb.orWhereRaw(`MATCH(${searchText.join(',')}) AGAINST(? IN BOOLEAN MODE)`, `*${query}*`);
           break;

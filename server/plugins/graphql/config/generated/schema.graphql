@@ -4,14 +4,12 @@ type Article {
   updated_at: DateTime!
   title: String
   subheading: String
-  overviewImg: UploadFile
   bodycopy: String
 }
 
 input ArticleInput {
   title: String
   subheading: String
-  overviewImg: ID
   bodycopy: String
 }
 
@@ -31,6 +29,22 @@ type createHomePayload {
   home: Home
 }
 
+input createJobsInput {
+  data: JobsInput
+}
+
+type createJobsPayload {
+  job: Jobs
+}
+
+input createPortfolioInput {
+  data: PortfolioInput
+}
+
+type createPortfolioPayload {
+  portfolio: Portfolio
+}
+
 input createRoleInput {
   data: RoleInput
 }
@@ -39,28 +53,12 @@ type createRolePayload {
   role: UsersPermissionsRole
 }
 
-input createServiceInput {
-  data: ServiceInput
-}
-
-type createServicePayload {
-  service: Service
-}
-
 input createUserInput {
   data: UserInput
 }
 
 type createUserPayload {
   user: UsersPermissionsUser
-}
-
-input createWorkInput {
-  data: WorkInput
-}
-
-type createWorkPayload {
-  work: Work
 }
 
 """
@@ -84,20 +82,28 @@ type deleteHomePayload {
   home: Home
 }
 
+input deleteJobsInput {
+  where: InputID
+}
+
+type deleteJobsPayload {
+  job: Jobs
+}
+
+input deletePortfolioInput {
+  where: InputID
+}
+
+type deletePortfolioPayload {
+  portfolio: Portfolio
+}
+
 input deleteRoleInput {
   where: InputID
 }
 
 type deleteRolePayload {
   role: UsersPermissionsRole
-}
-
-input deleteServiceInput {
-  where: InputID
-}
-
-type deleteServicePayload {
-  service: Service
 }
 
 input deleteUserInput {
@@ -108,18 +114,9 @@ type deleteUserPayload {
   user: UsersPermissionsUser
 }
 
-input deleteWorkInput {
-  where: InputID
-}
-
-type deleteWorkPayload {
-  work: Work
-}
-
 input editArticleInput {
   title: String
   subheading: String
-  overviewImg: ID
   bodycopy: String
 }
 
@@ -141,18 +138,23 @@ input editHomeInput {
   subheading: String
 }
 
+input editJobsInput {
+  title: String
+  intro: String
+  home: ID
+}
+
+input editPortfolioInput {
+  title: String
+  subheading: String
+}
+
 input editRoleInput {
   name: String
   description: String
   type: String
   permissions: [ID]
   users: [ID]
-}
-
-input editServiceInput {
-  title: String
-  subheading: String
-  bodycopy: String
 }
 
 input editUserInput {
@@ -164,11 +166,6 @@ input editUserInput {
   confirmed: Boolean
   blocked: Boolean
   role: ID
-}
-
-input editWorkInput {
-  title: String
-  subheading: String
 }
 
 input FileInput {
@@ -201,6 +198,21 @@ input InputID {
   id: ID!
 }
 
+type Jobs {
+  id: ID!
+  created_at: DateTime!
+  updated_at: DateTime!
+  title: String
+  intro: String
+  home: Home
+}
+
+input JobsInput {
+  title: String
+  intro: String
+  home: ID
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -209,7 +221,7 @@ scalar JSON
 """The `Long` scalar type represents 52-bit integers"""
 scalar Long
 
-union Morph = UsersPermissionsMe | UsersPermissionsMeRole | Article | createArticlePayload | updateArticlePayload | deleteArticlePayload | Home | createHomePayload | updateHomePayload | deleteHomePayload | Service | createServicePayload | updateServicePayload | deleteServicePayload | Work | createWorkPayload | updateWorkPayload | deleteWorkPayload | UploadFile | UsersPermissionsPermission | UsersPermissionsRole | createRolePayload | updateRolePayload | deleteRolePayload | UsersPermissionsUser | createUserPayload | updateUserPayload | deleteUserPayload
+union Morph = UsersPermissionsMe | UsersPermissionsMeRole | Article | createArticlePayload | updateArticlePayload | deleteArticlePayload | Home | createHomePayload | updateHomePayload | deleteHomePayload | Jobs | createJobsPayload | updateJobsPayload | deleteJobsPayload | Portfolio | createPortfolioPayload | updatePortfolioPayload | deletePortfolioPayload | UploadFile | UsersPermissionsPermission | UsersPermissionsRole | createRolePayload | updateRolePayload | deleteRolePayload | UsersPermissionsUser | createUserPayload | updateUserPayload | deleteUserPayload
 
 type Mutation {
   createArticle(input: createArticleInput): createArticlePayload
@@ -218,12 +230,12 @@ type Mutation {
   createHome(input: createHomeInput): createHomePayload
   updateHome(input: updateHomeInput): updateHomePayload
   deleteHome(input: deleteHomeInput): deleteHomePayload
-  createService(input: createServiceInput): createServicePayload
-  updateService(input: updateServiceInput): updateServicePayload
-  deleteService(input: deleteServiceInput): deleteServicePayload
-  createWork(input: createWorkInput): createWorkPayload
-  updateWork(input: updateWorkInput): updateWorkPayload
-  deleteWork(input: deleteWorkInput): deleteWorkPayload
+  createJobs(input: createJobsInput): createJobsPayload
+  updateJobs(input: updateJobsInput): updateJobsPayload
+  deleteJobs(input: deleteJobsInput): deleteJobsPayload
+  createPortfolio(input: createPortfolioInput): createPortfolioPayload
+  updatePortfolio(input: updatePortfolioInput): updatePortfolioPayload
+  deletePortfolio(input: deletePortfolioInput): deletePortfolioPayload
 
   """Create a new role"""
   createRole(input: createRoleInput): createRolePayload
@@ -245,15 +257,28 @@ type Mutation {
   upload(refId: ID, ref: String, source: String, file: Upload!): UploadFile!
 }
 
+type Portfolio {
+  id: ID!
+  created_at: DateTime!
+  updated_at: DateTime!
+  title: String
+  subheading: String
+}
+
+input PortfolioInput {
+  title: String
+  subheading: String
+}
+
 type Query {
   article(id: ID!): Article
   articles(sort: String, limit: Int, start: Int, where: JSON): [Article]
   home(id: ID!): Home
   homes(sort: String, limit: Int, start: Int, where: JSON): [Home]
-  service(id: ID!): Service
-  services(sort: String, limit: Int, start: Int, where: JSON): [Service]
-  work(id: ID!): Work
-  works(sort: String, limit: Int, start: Int, where: JSON): [Work]
+  job(id: ID!): Jobs
+  jobs(sort: String, limit: Int, start: Int, where: JSON): [Jobs]
+  portfolio(id: ID!): Portfolio
+  portfolios(sort: String, limit: Int, start: Int, where: JSON): [Portfolio]
   files(sort: String, limit: Int, start: Int, where: JSON): [UploadFile]
   role(id: ID!): UsersPermissionsRole
 
@@ -274,21 +299,6 @@ input RoleInput {
   users: [ID]
 }
 
-type Service {
-  id: ID!
-  created_at: DateTime!
-  updated_at: DateTime!
-  title: String
-  subheading: String
-  bodycopy: String
-}
-
-input ServiceInput {
-  title: String
-  subheading: String
-  bodycopy: String
-}
-
 input updateArticleInput {
   where: InputID
   data: editArticleInput
@@ -307,6 +317,24 @@ type updateHomePayload {
   home: Home
 }
 
+input updateJobsInput {
+  where: InputID
+  data: editJobsInput
+}
+
+type updateJobsPayload {
+  job: Jobs
+}
+
+input updatePortfolioInput {
+  where: InputID
+  data: editPortfolioInput
+}
+
+type updatePortfolioPayload {
+  portfolio: Portfolio
+}
+
 input updateRoleInput {
   where: InputID
   data: editRoleInput
@@ -316,15 +344,6 @@ type updateRolePayload {
   role: UsersPermissionsRole
 }
 
-input updateServiceInput {
-  where: InputID
-  data: editServiceInput
-}
-
-type updateServicePayload {
-  service: Service
-}
-
 input updateUserInput {
   where: InputID
   data: editUserInput
@@ -332,15 +351,6 @@ input updateUserInput {
 
 type updateUserPayload {
   user: UsersPermissionsUser
-}
-
-input updateWorkInput {
-  where: InputID
-  data: editWorkInput
-}
-
-type updateWorkPayload {
-  work: Work
 }
 
 """The `Upload` scalar type represents a file upload."""
@@ -416,17 +426,4 @@ type UsersPermissionsUser {
   confirmed: Boolean
   blocked: Boolean
   role: UsersPermissionsRole
-}
-
-type Work {
-  id: ID!
-  created_at: DateTime!
-  updated_at: DateTime!
-  title: String
-  subheading: String
-}
-
-input WorkInput {
-  title: String
-  subheading: String
 }

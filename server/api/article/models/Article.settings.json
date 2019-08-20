@@ -1,6 +1,6 @@
 {
   "connection": "default",
-  "collectionName": "portfolios",
+  "collectionName": "articles",
   "info": {
     "name": "article",
     "description": ""
@@ -16,11 +16,6 @@
     },
     "subheading": {
       "type": "string"
-    },
-    "overviewImg": {
-      "model": "file",
-      "via": "related",
-      "plugin": "upload"
     },
     "bodycopy": {
       "type": "text"

@@ -1,8 +1,8 @@
-/* global Service */
+/* global Jobs */
 'use strict';
 
 /**
- * Service.js service
+ * Jobs.js service
  *
  * @description: A set of functions similar to controller's actions to avoid code duplication.
  */
@@ -18,43 +18,43 @@ const { convertRestQueryParams, buildQuery } = require('strapi-utils');
 module.exports = {
 
   /**
-   * Promise to fetch all services.
+   * Promise to fetch all jobs.
    *
    * @return {Promise}
    */
 
   fetchAll: (params, populate) => {
     // Select field to populate.
-    const withRelated = populate || Service.associations
+    const withRelated = populate || Jobs.associations
       .filter(ast => ast.autoPopulate !== false)
       .map(ast => ast.alias);
 
     const filters = convertRestQueryParams(params);
 
-    return Service.query(buildQuery({ model: Service, filters }))
+    return Jobs.query(buildQuery({ model: Jobs, filters }))
       .fetchAll({ withRelated })
       .then(data => data.toJSON());
   },
 
   /**
-   * Promise to fetch a/an service.
+   * Promise to fetch a/an jobs.
    *
    * @return {Promise}
    */
 
   fetch: (params) => {
     // Select field to populate.
-    const populate = Service.associations
+    const populate = Jobs.associations
       .filter(ast => ast.autoPopulate !== false)
       .map(ast => ast.alias);
 
-    return Service.forge(_.pick(params, 'id')).fetch({
+    return Jobs.forge(_.pick(params, 'id')).fetch({
       withRelated: populate
     });
   },
 
   /**
-   * Promise to count a/an service.
+   * Promise to count a/an jobs.
    *
    * @return {Promise}
    */
@@ -63,54 +63,54 @@ module.exports = {
     // Convert `params` object to filters compatible with Bookshelf.
     const filters = convertRestQueryParams(params);
 
-    return Service.query(buildQuery({ model: Service, filters: _.pick(filters, 'where') })).count();
+    return Jobs.query(buildQuery({ model: Jobs, filters: _.pick(filters, 'where') })).count();
   },
 
   /**
-   * Promise to add a/an service.
+   * Promise to add a/an jobs.
    *
    * @return {Promise}
    */
 
   add: async (values) => {
     // Extract values related to relational data.
-    const relations = _.pick(values, Service.associations.map(ast => ast.alias));
-    const data = _.omit(values, Service.associations.map(ast => ast.alias));
+    const relations = _.pick(values, Jobs.associations.map(ast => ast.alias));
+    const data = _.omit(values, Jobs.associations.map(ast => ast.alias));
 
     // Create entry with no-relational data.
-    const entry = await Service.forge(data).save();
+    const entry = await Jobs.forge(data).save();
 
     // Create relational data and return the entry.
-    return Service.updateRelations({ id: entry.id , values: relations });
+    return Jobs.updateRelations({ id: entry.id , values: relations });
   },
 
   /**
-   * Promise to edit a/an service.
+   * Promise to edit a/an jobs.
    *
    * @return {Promise}
    */
 
   edit: async (params, values) => {
     // Extract values related to relational data.
-    const relations = _.pick(values, Service.associations.map(ast => ast.alias));
-    const data = _.omit(values, Service.associations.map(ast => ast.alias));
+    const relations = _.pick(values, Jobs.associations.map(ast => ast.alias));
+    const data = _.omit(values, Jobs.associations.map(ast => ast.alias));
 
     // Create entry with no-relational data.
-    const entry = await Service.forge(params).save(data);
+    const entry = await Jobs.forge(params).save(data);
 
     // Create relational data and return the entry.
-    return Service.updateRelations(Object.assign(params, { values: relations }));
+    return Jobs.updateRelations(Object.assign(params, { values: relations }));
   },
 
   /**
-   * Promise to remove a/an service.
+   * Promise to remove a/an jobs.
    *
    * @return {Promise}
    */
 
   remove: async (params) => {
     params.values = {};
-    Service.associations.map(association => {
+    Jobs.associations.map(association => {
       switch (association.nature) {
         case 'oneWay':
         case 'oneToOne':
@@ -127,41 +127,41 @@ module.exports = {
       }
     });
 
-    await Service.updateRelations(params);
+    await Jobs.updateRelations(params);
 
-    return Service.forge(params).destroy();
+    return Jobs.forge(params).destroy();
   },
 
   /**
-   * Promise to search a/an service.
+   * Promise to search a/an jobs.
    *
    * @return {Promise}
    */
 
   search: async (params) => {
     // Convert `params` object to filters compatible with Bookshelf.
-    const filters = strapi.utils.models.convertParams('service', params);
+    const filters = strapi.utils.models.convertParams('jobs', params);
     // Select field to populate.
-    const populate = Service.associations
+    const populate = Jobs.associations
       .filter(ast => ast.autoPopulate !== false)
       .map(ast => ast.alias);
 
-    const associations = Service.associations.map(x => x.alias);
-    const searchText = Object.keys(Service._attributes)
-      .filter(attribute => attribute !== Service.primaryKey && !associations.includes(attribute))
-      .filter(attribute => ['string', 'text'].includes(Service._attributes[attribute].type));
+    const associations = Jobs.associations.map(x => x.alias);
+    const searchText = Object.keys(Jobs._attributes)
+      .filter(attribute => attribute !== Jobs.primaryKey && !associations.includes(attribute))
+      .filter(attribute => ['string', 'text'].includes(Jobs._attributes[attribute].type));
 
-    const searchInt = Object.keys(Service._attributes)
-      .filter(attribute => attribute !== Service.primaryKey && !associations.includes(attribute))
-      .filter(attribute => ['integer', 'decimal', 'float'].includes(Service._attributes[attribute].type));
+    const searchInt = Object.keys(Jobs._attributes)
+      .filter(attribute => attribute !== Jobs.primaryKey && !associations.includes(attribute))
+      .filter(attribute => ['integer', 'decimal', 'float'].includes(Jobs._attributes[attribute].type));
 
-    const searchBool = Object.keys(Service._attributes)
-      .filter(attribute => attribute !== Service.primaryKey && !associations.includes(attribute))
-      .filter(attribute => ['boolean'].includes(Service._attributes[attribute].type));
+    const searchBool = Object.keys(Jobs._attributes)
+      .filter(attribute => attribute !== Jobs.primaryKey && !associations.includes(attribute))
+      .filter(attribute => ['boolean'].includes(Jobs._attributes[attribute].type));
 
     const query = (params._q || '').replace(/[^a-zA-Z0-9.-\s]+/g, '');
 
-    return Service.query(qb => {
+    return Jobs.query(qb => {
       if (!_.isNaN(_.toNumber(query))) {
         searchInt.forEach(attribute => {
           qb.orWhereRaw(`${attribute} = ${_.toNumber(query)}`);
@@ -175,7 +175,7 @@ module.exports = {
       }
 
       // Search in columns with text using index.
-      switch (Service.client) {
+      switch (Jobs.client) {
         case 'mysql':
           qb.orWhereRaw(`MATCH(${searchText.join(',')}) AGAINST(? IN BOOLEAN MODE)`, `*${query}*`);
           break;
