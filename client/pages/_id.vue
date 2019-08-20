@@ -10,9 +10,9 @@
     </div>
     <div class="row h-100">
         <div class="col-md-12">
-            <pre>
+            <p class="mt-3">
             {{$route.params.bodycopy}}
-            </pre>
+            </p>
         </div>
     </div>
 </section>
